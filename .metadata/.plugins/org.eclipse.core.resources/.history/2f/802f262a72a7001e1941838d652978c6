@@ -1,0 +1,58 @@
+package com.example.webdevteam.soaproduit.controllers;
+
+//Ce code représente un contrôleur Spring Boot appelé MatchController, qui gère les opérations HTTP pour une entité MatchModel et qui est responsable 
+//       de l'appel aux services Backend, et de la renvoi des réponses HTTP au Frontend.
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.webdevteam.soaproduit.models.ProductModel;
+import com.example.webdevteam.soaproduit.services.ProductService;
+
+//  Déclaration du contrôleur comme une classe Spring Boot RestController
+@RestController
+//  Mapping de l'URL de base pour les opérations liées aux produits
+@RequestMapping("api/products")
+//  Configuration pour autoriser les requêtes provenant d'une origine spécifique (CORS)
+@CrossOrigin("*")   // * C'est l'origine des pages Frontend
+public class ProductController {
+	
+	@Autowired    // POUR injecter ou créer une instance dans spring boot
+	public ProductService pService;
+	
+	@GetMapping("")
+	public List<ProductModel> getAll(){
+		return pService.getAllProducts();	
+	}
+	
+	@GetMapping("/{id}")
+	public ProductModel getById(@PathVariable Long id) {
+		return pService.getProductById(id);
+	}
+	
+	@DeleteMapping("/{id}")
+	public void deleteById(@PathVariable Long id) {
+		pService.deleteProductById(id);
+	}
+	
+	@PostMapping
+	public ProductModel add(@RequestBody ProductModel p) {
+		return pService.addProduct(p);
+	}
+	
+	@PutMapping
+	public ProductModel edit(@RequestBody ProductModel p) {
+		return pService.updateProduct(p);
+	}
+
+}
